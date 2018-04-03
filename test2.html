@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Vue 实例</title>
+</head>
+<body>
+    <div id="app">
+        <input type="text" v-model="name" placeholder="你的名字">
+        <h1>你好，{{ name }}</h1>
+    </div>
+    <br>
+    <div id="app1">
+        {{ date }}
+    </div>
+    <br>
+    <div id="app2">
+        <span v-html="link"></span>
+    </div>
+    <br>
+    <div id="app3">
+        {{ number / 10 }}
+        {{ isOK ? '确定' : '取消' }}
+        {{ text.split(',').reverse().join(',') }}
+    </div>
+    <br>
+    <div id="app4">
+        {{ date1 | formatDate }}
+    </div>
+    <script src="vue.min.js"></script>
+    <script>
+        var app = new Vue({
+            el: '#app',
+            data: {
+                name: ''
+            }
+        })
+
+        var app1 = new Vue({
+            el: '#app1',
+            data: {
+                date: new Date()
+            },
+            mounted: function () {
+                var _this = this;
+                this.timer = setInterval(function () {
+                    _this.date = new Date();
+                },1000);
+            },
+            beforeDestroy: function () {
+                if (this.timer) {
+                    clearInterval(this.timer)
+                }
+            }
+        })
+
+        var app2 = new Vue({
+            el: '#app2',
+            data: {
+                link: '<a href="https://www.baidu.com" target="_blank">这是个连接</a>'
+            }
+        })
+
+        var app3 = new Vue({
+            el: '#app3',
+            data:{
+                number: 100,
+                isOK: false,
+                text: '123,456'
+            }
+        })
+
+        var padDate = function (value) {
+            return value < 10 ? '0' + value : value;
+        }
+
+        var app4 = new Vue({
+            el: '#app4',
+            data: {
+                date1: new Date()
+            },
+            filters: {
+                formatDate: function (value) {
+                    var date = new Date(value);
+                    var year = date.getFullYear();
+                    var month = padDate(date.getMonth() + 1);
+                    var day = padDate(date.getDate());
+                    var hours = padDate(date.getHours());
+                    var minutes = padDate(date.getMinutes());
+                    var seconds = padDate(date.getSeconds());
+                    return year + '-' + month + '-' + day + '-' + hours + ':' + minutes + ':' + seconds;
+                }
+            },
+            mounted: function () {
+                var _this = this;
+                this.timer = setInterval(function () {
+                    _this.date1 = new Date();
+                },1000)
+            },
+            beforeDestroy: function () {
+                if(this.timer){
+                    clearInterval(this.timer);
+                }
+            }
+        })
+    </script>
+</body>
+</html>
